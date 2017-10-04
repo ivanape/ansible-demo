@@ -1,14 +1,29 @@
----
+
 # tasks file for install
-    - name: 1. install Apache
-      apt: name=apache2 state=present
+  - name: "Install Apache, MySQL, PHP, and other dependencies."
+    apt: name="{{item}}" state=present
+    with_items:
+      - git
+      - curl
+      - sendmail
+      - apache2
+      - php7.0
+      - php7.0-common
+      - php7.0-mysql
+      - php7.0-cli
+      - php7.0-curl
+      - php7.0-gd
+      - php7.0-dev
+      - php7.0-mcrypt
+      - python-mysqldb
+      - mysql-server
 
-    - name: 2. install PHP module for Apache
-      apt: name=libapache2-mod-php state=present
+  - name: 2. install PHP module for Apache
+    apt: name=libapache2-mod-php state=present
 
-    - name: 3. start Apache
-      service: name=apache2 state=started enabled=yes
+  - name: 3. start Apache
+    service: name=apache2 state=started enabled=yes
 
-    - name: 4. install Hello World PHP script
-      copy: src=. dest="{{__http_dir}}/"  mode=0664
+  - name: 4. install Hello World PHP script
+    copy: src=. dest="{{__http_dir}}/"  mode=0664
 
