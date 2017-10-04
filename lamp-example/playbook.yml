@@ -1,0 +1,5 @@
+## use: ansible-playbook playbook.yml -i hosts
+- hosts: devserver
+
+  roles:
+    - install

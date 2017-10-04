@@ -1,0 +1,2 @@
+[devserver]
+vps461624.ovh.net ansible_ssh_user=root
