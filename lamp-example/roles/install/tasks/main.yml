@@ -18,10 +18,15 @@
       - python-mysqldb
       - mysql-server
 
-  - name: 2. install PHP module for Apache
+  - name: "Install PHP module for Apache"
     apt: name=libapache2-mod-php state=present
 
-  - name: 3. Clean www directory
+  - name: "Enable Apache rewrite module"
+    apache2_module: name=rewrite state=present
+    notify:
+      - restart apache    
+
+  - name: "Clean www directory"
     file:
       state: "{{item}}"
       path: "{{__http_dir}}"
@@ -29,9 +34,12 @@
       - absent
       - directory
 
-  - name: 4. start Apache
-    service: name=apache2 state=started enabled=yes
+  - name: "Start Apache and MySQL"
+    service: "name={{ item }} state=started enabled=yes"
+    with_items:
+      - apache2
+      - mysql
 
-  - name: 5. install Hello World PHP script
+  - name: "Deploy www site"
     copy: src=. dest="{{__http_dir}}/"  mode=0664
 
