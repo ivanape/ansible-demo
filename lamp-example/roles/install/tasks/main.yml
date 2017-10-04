@@ -21,9 +21,17 @@
   - name: 2. install PHP module for Apache
     apt: name=libapache2-mod-php state=present
 
-  - name: 3. start Apache
+  - name: 3. Clean www directory
+    file:
+      state: "{{item}}"
+      path: "{{__http_dir}}"
+    with_items:
+      - absent
+      - directory
+
+  - name: 4. start Apache
     service: name=apache2 state=started enabled=yes
 
-  - name: 4. install Hello World PHP script
+  - name: 5. install Hello World PHP script
     copy: src=. dest="{{__http_dir}}/"  mode=0664
 
